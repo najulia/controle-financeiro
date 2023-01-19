@@ -1,10 +1,11 @@
-from rest_framework import serializers, fields
+from rest_framework import serializers
 from financas.models import Receita, Despesa
 
 class ReceitaSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Receita
-        fields = ['id', 'descricao','valor','data']
+        fields = '__all__'
 
 class DespesaSerializer(serializers.ModelSerializer):
 
