@@ -32,3 +32,4 @@ class Despesa(models.Model):
     @property
     def ano(self):
         return self.data.strftime('%Y')
+

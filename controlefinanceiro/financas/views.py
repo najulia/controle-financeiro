@@ -1,9 +1,10 @@
-from rest_framework import viewsets, generics, serializers
+from rest_framework import viewsets, generics
+from rest_framework.views import APIView
 from financas.models import Receita, Despesa
 from financas.serializers import ReceitaSerializer, DespesaSerializer
 from django.db.models import Sum
 from rest_framework.response import Response
-from django.http import JsonResponse
+from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticatedOrReadOnly
 
 class ReceitaViewSet(viewsets.ModelViewSet):
     """Endpoint para visualizar ou editar receitas"""
@@ -26,30 +27,25 @@ class ListaDespesasPorMes(generics.ListAPIView):
         """Endpoint para visualizar despesas conforme o mês"""
         return Despesa.objects.filter(data__year=self.kwargs['ano'], data__month=self.kwargs['mes'])
 
+class ResumoPorMes(APIView):
+    """Endpoint para visualizar despesas conforme o mês"""
 
-class ResumoPorMes(generics.ListAPIView, serializers.ModelSerializer):
-    """Endpoint para visualizar o resumo do mês"""
-
-    def get(self, request, *args, **kwargs):
+    def get(self,request,mes,ano):
+        receita_mes =  Receita.objects.filter(data__month = mes,data__year =ano).aggregate(TOTAL = Sum('valor'))['TOTAL']
+        despesa_mes =  Despesa.objects.filter(data__month = mes,data__year =ano).aggregate(TOTAL = Sum('valor'))['TOTAL']
+        total =  receita_mes - despesa_mes
+        categoria = Despesa.objects.filter(data__month = mes, data__year = ano,).values('categoria').annotate(total = Sum('valor'))
+        return Response ({
+            'Receita do Mês' : f"R$ {receita_mes}",
+            'Despesa do Mês' : f"R$ {despesa_mes}",
+            'Saldo restante' : f"R$ {total}",
+            'Gasto por categoria' : categoria,
         
-        receita_do_mes = Receita.objects.filter(data__year=self.kwargs['ano'], data__month=self.kwargs['mes']).aggregate(
-             Sum('valor')) 
-        despesa_do_mes = Despesa.objects.filter(data__year=self.kwargs['ano'], data__month=self.kwargs['mes']).aggregate(
-            Sum('valor'))
+        })
 
-        despesa_por_categoria = Despesa.objects.filter(data__year=self.kwargs['ano'], data__month=self.kwargs['mes']).values(
-            'categoria').annotate(Sum('valor'))
+class IsOwnerOrReadOnly(BasePermission):
+    """Impede que sejam realizadas operações de PUT, POST e DELETE"""
 
-        saldo = receita_do_mes['valor__sum'] - despesa_do_mes['valor__sum']
-
-        def formataDespesasPorCategoria(self):
-            despesas_formatadas = list(despesa_por_categoria)
-            return despesas_formatadas
-
-        
-        return Response({
-            "Receita mensal": f"R${receita_do_mes['valor__sum']}",
-            "Despesa mensal": f"R${despesa_do_mes['valor__sum']}",
-            "Despesas por categoria": f"{formataDespesasPorCategoria(self)}",
-            "Saldo mensal": f"{saldo}",
-           })
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True

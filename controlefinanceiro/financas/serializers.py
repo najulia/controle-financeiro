@@ -13,3 +13,4 @@ class DespesaSerializer(serializers.ModelSerializer):
         model = Despesa
         fields = '__all__'
 
+
