@@ -1,17 +1,13 @@
- <div align="center">
- 
- <h1 align="center"> API de controle financeiro </h1> 
+# API Controle financeiro 
 
-![Badge](https://img.shields.io/static/v1?label=status&message=EM%20DESENVOLVIMENTO&color=green&style=for-the-badge&logo=VSCODE)
+API de controle financeiro desenvolvida para a 3° edição dos challenges da Alura. Baseada em planilhas de controles de gasto, com registro de entradas, saídas e despesas. 
 
-<p align="center"> API de controle financeiro, para registro de despesas e receitas. Baseada em planilhas de controles de gasto. </p>
+| :placard: Vitrine.Dev |     |
+| -------------  | --- |
+| :sparkles: Nome        | API Controle Financeiro
+| :label: Tecnologias | Python, DJANGO REST 
+| :rocket: URL         | https://url-deploy.com.br
+| :fire: Desafio     | https://url-do-desafio.com.br
 
-### Ferramentas e tecnologias
-
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
-![DjangoREST](https://img.shields.io/badge/DJANGO-REST-ff1709?style=for-the-badge&logo=django&logoColor=white&color=ff1709&labelColor=gray)
-
-</div>
-
-
+<!-- Inserir imagem com a #vitrinedev ao final do link -->
+![](https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2022&q=80#vitrinedev)
